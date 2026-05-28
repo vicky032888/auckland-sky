@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="奥克兰星空">
+<title>奥克兰星空</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f8f6;color:#1a1a1a;min-height:100vh}
+.app{max-width:480px;margin:0 auto;padding:16px}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:8px}
+.hdr h1{font-size:20px;font-weight:600;color:#1a1a1a}
+.hdr p{font-size:12px;color:#888;margin-top:2px}
+.rbtn{border:1px solid #ddd;border-radius:10px;background:#fff;color:#555;font-size:13px;padding:7px 13px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.rbtn:active{background:#f0f0f0}
+.tabs{display:flex;background:#fff;border-radius:12px;padding:4px;margin-bottom:16px;border:1px solid #eee}
+.tab{flex:1;padding:9px 4px;font-size:14px;cursor:pointer;border:none;background:none;color:#888;border-radius:9px;text-align:center;transition:all 0.2s}
+.tab.active{background:#1a1a1a;color:#fff;font-weight:500}
+.card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.card-ttl{font-size:13px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.metric{background:#f8f8f6;border-radius:10px;padding:10px 12px}
+.mlbl{font-size:11px;color:#999;margin-bottom:3px}
+.mval{font-size:16px;font-weight:600;color:#1a1a1a}
+.row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.row:last-child{border-bottom:none;padding-bottom:0}
+.rlbl{font-size:13px;color:#666}
+.rval{font-size:13px;font-weight:500;color:#1a1a1a;text-align:right}
+.badge{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:500;white-space:nowrap}
+.bg{background:#e6f7f0;color:#0a7c4e}
+.ba{background:#fef3e2;color:#92540a}
+.br{background:#feeaea;color:#9b2222}
+.bb{background:#e8f1fc;color:#1a4f8a}
+.bgr{background:#f2f2f0;color:#555}
+.bp{background:#eeecfd;color:#3d2fa0}
+.kp-bar{display:flex;gap:2px;margin-top:8px}
+.kps{height:18px;flex:1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.slbl{font-size:11px;color:#aaa;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin:16px 0 8px 2px}
+.ecard{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 15px;cursor:pointer;margin-bottom:10px;transition:border-color 0.15s}
+.ecard.open{border-color:#ccc}
+.ehdr{display:flex;align-items:flex-start;gap:10px}
+.edot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.emeta{flex:1;min-width:0}
+.ename{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.3}
+.edate{font-size:12px;color:#999;margin-top:3px}
+.etags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.edet{margin-top:12px;padding-top:12px;border-top:1px solid #f0f0f0;display:none}
+.ecard.open .edet{display:block}
+.edesc{font-size:13px;color:#666;line-height:1.65;margin-bottom:10px}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.ii{background:#f8f8f6;border-radius:9px;padding:8px 10px}
+.il{font-size:11px;color:#aaa;margin-bottom:2px}
+.iv{font-size:12px;font-weight:600;color:#1a1a1a}
+.sttl{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.si{display:flex;align-items:center;gap:9px;padding:8px 11px;background:#f8f8f6;border-radius:10px;margin-bottom:5px;cursor:pointer;text-decoration:none}
+.si:active{background:#efefed}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sn{font-size:13px;font-weight:500;color:#1a1a1a;flex:1}
+.ss{font-size:11px;color:#999}
+.rbtn2{margin-top:10px;width:100%;padding:10px;border:1px solid #ddd;border-radius:11px;background:#fff;color:#1a1a1a;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s}
+.rbtn2:active{background:#f5f5f5}
+.rbtn2.set{border-color:#0a7c4e;color:#0a7c4e;background:#e6f7f0}
+.npill{font-size:11px;padding:2px 7px;background:#fef3e2;color:#92540a;border-radius:7px;font-weight:500}
+.chev{color:#ccc;font-size:16px;margin-top:2px;transition:transform 0.2s;flex-shrink:0}
+.loading{text-align:center;padding:2.5rem 1rem;color:#aaa;font-size:14px}
+.spin{display:inline-block;animation:spin 1s linear infinite;font-size:22px;margin-bottom:8px;display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.moon-row{display:flex;align-items:center;gap:14px}
+.mi{width:48px;height:48px;border-radius:50%;background:#f8f8f6;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.err-note{font-size:12px;color:#aaa;padding:9px 12px;background:#f8f8f6;border-radius:10px;margin-top:8px;line-height:1.5}
+.src-note{font-size:11px;color:#ccc;margin-top:8px;padding-bottom:24px;text-align:center}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div>
+      <h1>🌌 奥克兰星空</h1>
+      <p id="hdr-sub">Auckland · 加载中...</p>
+    </div>
+    <button class="rbtn" onclick="loadAll()">↻ 刷新</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="sw('today',this)">今日实况</button>
+    <button class="tab" onclick="sw('7d',this)">7 天</button>
+    <button class="tab" onclick="sw('year',this)">年度</button>
+  </div>
+
+  <div id="v-today"><div class="loading"><span class="spin">⟳</span>获取实时数据...</div></div>
+  <div id="v-7d" style="display:none"></div>
+  <div id="v-year" style="display:none"></div>
+</div>
+
+<script>
+const LAT=-36.8485,LNG=174.7633;
+const NZ_NOW=()=>new Date(new Date().toLocaleString('en-US',{timeZone:'Pacific/Auckland'}));
+const TODAY_STR=NZ_NOW().toISOString().slice(0,10);
+
+const SITES={
+  shakespear:{name:'Shakespear Park',sub:'Whangaparaoa · 50km',col:'#1D9E75',dark:'极暗'},
+  goldie:{name:'Goldie Bush',sub:'Waitakere · 30km',col:'#3aaa7a',dark:'较暗'},
+  coatesville:{name:'Coatesville',sub:'Albany · 25km',col:'#3aaa7a',dark:'较暗'},
+  piha:{name:'Piha Beach',sub:'西海岸 · 40km',col:'#3aaa7a',dark:'较暗'},
+  awhitu:{name:'Awhitu Peninsula',sub:'Manukau · 70km',col:'#1D9E75',dark:'极暗'},
+  miranda:{name:'Miranda 湿地',sub:'Thames · 80km',col:'#3aaa7a',dark:'较暗'},
+};
+
+const EVS=[
+  {id:'e1',date:'2026-05-31',name:'η水瓶座流星雨（尾声）',type:'meteor',tags:['meteor'],peak:'05-31至06-02',rate:'约15颗/小时',best:'凌晨3时后',desc:'哈雷彗星尘埃带，速度约66km/s，可见亮火流星。凌晨后朝北方向最佳。',sites:['shakespear','goldie','coatesville'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e2',date:'2026-06-03',name:'月全食',type:'eclipse',tags:['eclipse','moon'],peak:'02:12–05:47 NZST',rate:'全食约50分钟',best:'02:00后',desc:'奥克兰全程可见"血月"，月亮呈深红色，高悬西偏北方向。无需任何器材。',sites:['shakespear','awhitu','piha'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e3',date:'2026-06-10',name:'新月暗夜观星窗',type:'moon',tags:['moon'],peak:'06-07–06-14',rate:'月光影响极小',best:'整夜',desc:'新月前后一周银河核心清晰可见，深空摄影绝佳窗口。',sites:['shakespear','awhitu','coatesville'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e4',date:'2026-07-29',name:'δ南鱼座流星雨',type:'meteor',tags:['meteor'],peak:'07-29–08-01',rate:'约20颗/小时',best:'子夜后',desc:'南半球地利优势，多橙黄色亮流星，适合肉眼观看。',sites:['shakespear','awhitu','miranda'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e5',date:'2026-08-12',name:'英仙座流星雨',type:'meteor',tags:['meteor'],peak:'08-11–08-13',rate:'约20–35颗/小时',best:'凌晨2–4时',desc:'辐射点贴近北方地平线，需找北方开阔视野。Shakespear朝北海岸线最佳。',sites:['shakespear','goldie','coatesville'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e6',date:'2026-09-07',name:'南极光活跃期',type:'aurora',tags:['aurora'],peak:'9月磁暴活跃窗',rate:'依Kp指数而定',best:'子夜前后朝南',desc:'9月极光黄金月份。Kp≥5南岛可见，Kp≥7奥克兰有机会。关注今日实况中的Kp数据。',sites:['shakespear','awhitu','piha'],maps:'Awhitu+Peninsula+Auckland'},
+  {id:'e7',date:'2026-10-08',name:'天龙座流星雨',type:'meteor',tags:['meteor'],peak:'10-08–10-09',rate:'约10–15颗/小时',best:'晚间20–23时',desc:'难得适合早晚看的流星雨，不需熬夜，流星轨迹悠长。',sites:['shakespear','goldie','coatesville'],maps:'Goldie+Bush+Waitakere'},
+  {id:'e8',date:'2026-10-21',name:'猎户座流星雨',type:'meteor',tags:['meteor'],peak:'10-20–10-22',rate:'约20–25颗/小时',best:'凌晨1–4时',desc:'同源哈雷彗星，速度极快，南半球视角佳，秋季天气稳定。',sites:['shakespear','awhitu','miranda'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e9',date:'2026-11-17',name:'狮子座流星雨',type:'meteor',tags:['meteor'],peak:'11-17–11-18',rate:'约10–20颗/小时',best:'凌晨3–5时',desc:'历史上以流星暴著名，平常年份稳定出产，偶有亮火流星。',sites:['shakespear','goldie','coatesville'],maps:'Shakespear+Regional+Park+Auckland'},
+  {id:'e10',date:'2026-12-13',name:'双子座流星雨 ★',type:'meteor',tags:['meteor'],peak:'12-13–12-14',rate:'约80–120颗/小时',best:'凌晨0–3时',desc:'全年最强，母体小行星3200 Phaethon，火流星多，年度压轴盛事。',sites:['shakespear','awhitu','coatesville','piha'],maps:'Shakespear+Regional+Park+Auckland'},
+];
+
+const reminders=new Set();
+let cache={sun:null,wx:null,kp:null};
+
+function fmt(s){return new Date(s).toLocaleTimeString('zh-CN',{timeZone:'Pacific/Auckland',hour:'2-digit',minute:'2-digit'})}
+function fmtD(s){return new Date(s).toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'})}
+function daysFrom(ds){const n=NZ_NOW();return Math.round((new Date(ds)-new Date(n.toISOString().slice(0,10)))/86400000)}
+function typeCol(t){return{meteor:'#1D9E75',eclipse:'#534AB7',aurora:'#185FA5',moon:'#888'}[t]||'#888'}
+function tagBadge(t){const m={meteor:['流星雨','bg'],eclipse:['食','bp'],aurora:['极光','bb'],moon:['月相','bgr']};const[l,c]=m[t]||[t,'bgr'];return`<span class="badge ${c}">${l}</span>`}
+function skyQ(cl,hu){
+  if(cl<20&&hu<70)return{l:'极佳',c:'bg',t:'晴空，彩霞概率高'};
+  if(cl<40)return{l:'良好',c:'bg',t:'薄云助色，有望彩霞'};
+  if(cl<65)return{l:'一般',c:'ba',t:'局部可见'};
+  return{l:'较差',c:'br',t:'云层过厚'};
+}
+function kpLbl(k){if(k<2)return{l:'宁静',c:'bgr'};if(k<4)return{l:'轻微',c:'bb'};if(k<5)return{l:'中等',c:'bb'};if(k<6)return{l:'活跃 ★',c:'ba'};return{l:'强烈',c:'br'}}
+function kpChance(k){if(k>=7)return'奥克兰可见';if(k>=6)return'南部低空可见';if(k>=5)return'南岛南端可见';return'暂无机会'}
+function moonPhase(d){
+  const diff=(d-new Date('2000-01-06T18:14:00Z'))/86400000;
+  const p=((diff%29.53058867)+29.53058867)%29.53058867;
+  const f=p/29.53058867;
+  let n,ic;
+  if(f<0.033||f>0.967){n='新月';ic='🌑'}else if(f<0.133){n='娥眉月';ic='🌒'}else if(f<0.233){n='上弦月';ic='🌓'}else if(f<0.367){n='盈凸月';ic='🌔'}else if(f<0.433){n='满月';ic='🌕'}else if(f<0.533){n='亏凸月';ic='🌖'}else if(f<0.633){n='下弦月';ic='🌗'}else{n='残月';ic='🌘'}
+  return{name:n,icon:ic,illum:Math.round(Math.abs(Math.sin(f*Math.PI))*100),age:Math.round(p),dtf:f<0.5?Math.round((0.5-f)*29.5):Math.round((1.5-f)*29.5)};
+}
+
+async function loadAll(){
+  document.getElementById('v-today').innerHTML=`<div class="loading"><span class="spin">⟳</span>获取实时数据...</div>`;
+  const nz=NZ_NOW();
+  document.getElementById('hdr-sub').textContent=`Auckland · ${nz.toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'})}`;
+  const errs=[];
+  try{const r=await fetch(`https://api.sunrise-sunset.org/json?lat=${LAT}&lng=${LNG}&date=${TODAY_STR}&formatted=0`);const j=await r.json();if(j.status==='OK')cache.sun=j.results}catch{errs.push('日出日落')}
+  try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&hourly=cloudcover,relative_humidity_2m&timezone=Pacific%2FAuckland&forecast_days=1`);cache.wx=await r.json()}catch{errs.push('天气')}
+  try{const r=await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json');const j=await r.json();if(j&&j.length>1){const rec=j.slice(-8).filter(d=>d[1]!=='Kp');cache.kp=rec.map(d=>parseFloat(d[1]))}}catch{errs.push('极光')}
+  renderToday(errs);
+  renderEvents();
+}
+
+function renderToday(errs=[]){
+  const{sun,wx,kp}=cache;
+  const now=NZ_NOW();
+  const moon=moonPhase(now);
+  const rise=sun?fmt(sun.sunrise):'--';
+  const set=sun?fmt(sun.sunset):'--';
+  const dawn=sun?fmt(sun.civil_twilight_begin):'--';
+  const dusk=sun?fmt(sun.civil_twilight_end):'--';
+  const dl=sun?Math.round((new Date(sun.sunset)-new Date(sun.sunrise))/360000)/10:null;
+  let mCl=50,eCl=50,mHu=70,eHu=70,nCl=60;
+  if(wx&&wx.hourly){
+    const hrs=wx.hourly.time,cc=wx.hourly.cloudcover,hu=wx.hourly.relative_humidity_2m;
+    const sH=sun?new Date(sun.sunrise).getHours():6;
+    const eH=sun?new Date(sun.sunset).getHours():18;
+    const mI=hrs.findIndex(t=>t.startsWith(TODAY_STR)&&parseInt(t.slice(11,13))===sH);
+    const eI=hrs.findIndex(t=>t.startsWith(TODAY_STR)&&parseInt(t.slice(11,13))===eH);
+    const nI=hrs.findIndex(t=>t.startsWith(TODAY_STR)&&parseInt(t.slice(11,13))===23);
+    if(mI>=0){mCl=cc[mI]||50;mHu=hu[mI]||70}
+    if(eI>=0){eCl=cc[eI]||50;eHu=hu[eI]||70}
+    if(nI>=0)nCl=cc[nI]||60;
+  }
+  const mQ=skyQ(mCl,mHu),eQ=skyQ(eCl,eHu);
+  const nQ=nCl<30?{l:'极佳',c:'bg'}:nCl<55?{l:'良好',c:'bg'}:nCl<75?{l:'一般',c:'ba'}:{l:'较差',c:'br'};
+  const lkp=kp&&kp.length?kp[kp.length-1]:null;
+  const kl=lkp!==null?kpLbl(lkp):{l:'--',c:'bgr'};
+  const kpC=['#9FE1CB','#5DCAA5','#1D9E75','#EF9F27','#BA7517','#E24B4A','#A32D2D','#791F1F','#501313'];
+  const bars=['0','1','2','3','4','5','6','7','8+'].map((s,i)=>{const a=lkp!==null&&Math.round(lkp)===i;return`<div class="kps" style="background:${a?kpC[i]:'#f2f2f0'};color:${a?'#fff':'#bbb'};border:${a?'none':'none'}">${s}</div>`}).join('');
+  const errN=errs.length?`<div class="err-note">⚠️ 部分数据未能加载（${errs.join('、')}），显示估算值，请点刷新重试。</div>`:'';
+
+  document.getElementById('v-today').innerHTML=`
+<div class="slbl">日出日落</div>
+<div class="card">
+  <div class="g2">
+    <div class="metric"><div class="mlbl">民用曙光</div><div class="mval">${dawn}</div></div>
+    <div class="metric"><div class="mlbl">日出</div><div class="mval">${rise}</div></div>
+    <div class="metric"><div class="mlbl">日落</div><div class="mval">${set}</div></div>
+    <div class="metric"><div class="mlbl">黄昏</div><div class="mval">${dusk}</div></div>
+  </div>
+  ${dl?`<div style="font-size:12px;color:#aaa">今日日照 ${dl} 小时</div>`:''}
+</div>
+
+<div class="slbl">朝霞 · 晚霞</div>
+<div class="card">
+  <div class="row"><span class="rlbl">🌅 朝霞（${rise}）</span><span class="badge ${mQ.c}">${mQ.l}</span></div>
+  <div class="row"><span class="rlbl" style="font-size:12px;color:#aaa">云量 ${Math.round(mCl)}% · 湿度 ${Math.round(mHu)}%</span><span style="font-size:12px;color:#aaa">${mQ.t}</span></div>
+  <div class="row" style="margin-top:4px"><span class="rlbl">🌇 晚霞（${set}）</span><span class="badge ${eQ.c}">${eQ.l}</span></div>
+  <div class="row"><span class="rlbl" style="font-size:12px;color:#aaa">云量 ${Math.round(eCl)}% · 湿度 ${Math.round(eHu)}%</span><span style="font-size:12px;color:#aaa">${eQ.t}</span></div>
+</div>
+
+<div class="slbl">极光预报</div>
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div><span style="font-size:28px;font-weight:700;color:#1a1a1a">${lkp!==null?lkp.toFixed(1):'--'}</span><span style="font-size:13px;color:#999;margin-left:5px">Kp 指数</span></div>
+    <span class="badge ${kl.c}">${kl.l}</span>
+  </div>
+  <div class="kp-bar">${bars}</div>
+  <div style="font-size:11px;color:#ccc;margin-top:5px">Kp≥5 南岛南端 · Kp≥7 奥克兰有机会</div>
+  <div class="row" style="margin-top:8px"><span class="rlbl">奥克兰可见性</span><span class="rval">${lkp!==null?kpChance(lkp):'--'}</span></div>
+  <div class="row"><span class="rlbl">今夜观星条件</span><span class="rval"><span class="badge ${nQ.c}">${nQ.l}</span></span></div>
+  <div class="row"><span class="rlbl">观测方向</span><span class="rval">朝南，开阔视野</span></div>
+</div>
+
+<div class="slbl">月相</div>
+<div class="card">
+  <div class="moon-row">
+    <div class="mi">${moon.icon}</div>
+    <div style="flex:1">
+      <div style="font-size:16px;font-weight:600;color:#1a1a1a">${moon.name}</div>
+      <div style="font-size:12px;color:#999;margin-top:3px">月龄 ${moon.age} 天 · 照亮 ${moon.illum}%</div>
+      <div style="font-size:12px;color:#bbb;margin-top:2px">距下次满月 ${moon.dtf} 天</div>
+    </div>
+    <span class="badge ${moon.illum<30?'bg':moon.illum<60?'ba':'br'}">${moon.illum<30?'月光弱':moon.illum<60?'中等':'月光强'}</span>
+  </div>
+  <div style="margin-top:11px;padding-top:11px;border-top:1px solid #f0f0f0;font-size:12px;color:#aaa">${moon.illum<30?'绝佳观星窗口，流星雨和深空摄影首选':moon.illum<60?'深夜月落后条件改善':'月光影响大，关注月落时间后再观测'}</div>
+</div>
+${errN}
+<div class="src-note">NOAA · Open-Meteo · Sunrise-Sunset.org</div>`;
+}
+
+function renderEvents(){
+  const c7=document.getElementById('v-7d');
+  c7.innerHTML='';
+  const up=EVS.filter(e=>{const d=daysFrom(e.date);return d>=0&&d<=7});
+  if(!up.length){
+    c7.innerHTML=`<div class="loading">🌙<br><br>未来7天无重大天文事件<br><span style="font-size:12px">每晚都值得仰望星空</span></div>`;
+  } else {up.forEach(e=>addCard(e,c7))}
+  const soon=EVS.filter(e=>daysFrom(e.date)>7).slice(0,4);
+  if(soon.length){
+    const l=document.createElement('div');l.className='slbl';l.textContent='即将到来';c7.appendChild(l);
+    soon.forEach(e=>addCard(e,c7));
+  }
+  const cy=document.getElementById('v-year');
+  cy.innerHTML='';
+  let lm='';
+  EVS.forEach(e=>{
+    const m=new Date(e.date).toLocaleDateString('zh-CN',{year:'numeric',month:'long'});
+    if(m!==lm){const l=document.createElement('div');l.className='slbl';l.textContent=m;cy.appendChild(l);lm=m}
+    addCard(e,cy);
+  });
+}
+
+function addCard(ev,container){
+  const d=daysFrom(ev.date);
+  const card=document.createElement('div');
+  card.className='ecard';card.dataset.id=ev.id;
+  const tags=ev.tags.map(tagBadge).join('');
+  const pill=d>=0&&d<=7?`<span class="npill">即将到来</span>`:'';
+  const sites=ev.sites.map(s=>{
+    const si=SITES[s];
+    return`<a class="si" href="https://maps.apple.com/?q=${si.name.replace(/ /,'+')}" target="_blank">
+      <div class="sdot" style="background:${si.col}"></div>
+      <div style="flex:1"><div class="sn">${si.name}</div><div class="ss">${si.sub}</div></div>
+      <span class="badge bg">${si.dark}</span>
+    </a>`;
+  }).join('');
+  card.innerHTML=`
+<div class="ehdr">
+  <div class="edot" style="background:${typeCol(ev.type)}"></div>
+  <div class="emeta">
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:5px"><span class="ename">${ev.name}</span>${pill}</div>
+    <div class="edate">${fmtD(ev.date)}${d>=0?' · '+d+'天后':' · 已过'}</div>
+    <div class="etags">${tags}</div>
+  </div>
+  <span class="chev" id="chev-${ev.id}">›</span>
+</div>
+<div class="edet">
+  <p class="edesc">${ev.desc}</p>
+  <div class="ig">
+    <div class="ii"><div class="il">最佳时段</div><div class="iv">${ev.best}</div></div>
+    <div class="ii"><div class="il">${ev.type==='meteor'?'预期流量':'时段'}</div><div class="iv">${ev.rate}</div></div>
+    <div class="ii"><div class="il">峰值期</div><div class="iv">${ev.peak}</div></div>
+    <div class="ii"><div class="il">装备</div><div class="iv">${ev.type==='meteor'||ev.type==='aurora'?'肉眼即可':'肉眼/双筒'}</div></div>
+  </div>
+  <div class="sttl">📍 推荐观测地（点击导航）</div>
+  ${sites}
+  <button class="rbtn2${reminders.has(ev.id)?' set':''}" id="btn-${ev.id}" onclick="toggleR('${ev.id}','${ev.name}',event)">
+    ${reminders.has(ev.id)?'✓ 已设置提醒':'🔔 设置提醒'}
+  </button>
+</div>`;
+  card.querySelector('.ehdr').addEventListener('click',()=>{
+    const o=card.classList.contains('open');
+    document.querySelectorAll('.ecard.open').forEach(c=>{
+      c.classList.remove('open');
+      const ch=document.getElementById('chev-'+c.dataset.id);
+      if(ch){ch.textContent='›';ch.style.transform=''}
+    });
+    if(!o){
+      card.classList.add('open');
+      const ch=document.getElementById('chev-'+ev.id);
+      if(ch){ch.textContent='›';ch.style.transform='rotate(90deg)'}
+    }
+  });
+  container.appendChild(card);
+}
+
+function toggleR(id,name,e){
+  e.stopPropagation();
+  const btn=document.getElementById('btn-'+id);
+  if(reminders.has(id)){
+    reminders.delete(id);btn.textContent='🔔 设置提醒';btn.classList.remove('set');
+  } else {
+    reminders.add(id);btn.innerHTML='✓ 已设置提醒';btn.classList.add('set');
+    if('Notification' in window&&Notification.permission==='default'){
+      Notification.requestPermission().then(p=>{if(p==='granted')new Notification('星空提醒',{body:`「${name}」即将到来！`})});
+    } else if('Notification' in window&&Notification.permission==='granted'){
+      new Notification('星空提醒',{body:`「${name}」即将到来！`});
+    }
+  }
+}
+
+function sw(mode,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['today','7d','year'].forEach(v=>document.getElementById('v-'+v).style.display=v===mode?'':'none');
+}
+
+loadAll();
+</script>
+</body>
+</html>
